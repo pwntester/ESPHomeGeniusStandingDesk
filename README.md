@@ -1,4 +1,4 @@
-![image](https://github.com/pwntester/ESPHomeGeniusStandingDesk/assets/125701/3c11032f-7962-41d8-81ed-22f7d77360a3)# ESPHome Component for Genius Control Box
+# ESPHome Component for Genius Control Box
 
 ESPHome component to replace an Ergomaster's [MP4](https://ergomaster.eu/mp4-4-positions-memory-height-control/) that connect to a [Genius Control Box](https://ergomaster.eu/controlbox-genius/)
 Heavily inspired in https://github.com/TillFleisch/ESPHomeGenericSitStandDesk
