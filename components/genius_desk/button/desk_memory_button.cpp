@@ -2,20 +2,16 @@
 #include "esphome/core/log.h"
 #include "../genius_desk.h"
 
-namespace esphome
-{
-    namespace memory_button
-    {
+namespace esphome {
+    namespace memory_button {
 
         static const char *const TAG = "Desk.memoryButton";
 
-        void MemoryButton::dump_config()
-        {
+        void MemoryButton::dump_config() {
             LOG_BUTTON("", "Memory Button", this);
         }
 
-        void MemoryButton::press_action()
-        {
+        void MemoryButton::press_action() {
             switch (this->memory_id)
             {
             case 0:
@@ -30,7 +26,6 @@ namespace esphome
             case 3:
                 desk->set_target_height(120);
                 break;
-
             default:
                 break;
             }

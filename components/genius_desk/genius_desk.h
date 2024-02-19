@@ -6,50 +6,63 @@
 #include "esphome/components/sensor/sensor.h"
 #include "esphome/components/binary_sensor/binary_sensor.h"
 
-namespace esphome
-{
-    namespace desk_switch 
-    {
+namespace esphome {
+    namespace desk_switch {
         class DeskSwitch;
     }
-    namespace memory_button
-    {
+    namespace memory_button {
         class MemoryButton;
     }
-    namespace genius_desk
-    {
+    namespace calibration_button {
+        class CalibrationButton;
+    }
+    namespace genius_desk {
 
-        class GeniusDesk : public uart::UARTDevice, public PollingComponent
-        {
+        class GeniusDesk : public uart::UARTDevice, public PollingComponent {
         public:
             void setup() override;
             void loop() override;
             void update() override;
             void dump_config() override;
-            void set_target_height(float target);
-            void add_button(memory_button::MemoryButton *button);
+            void add_memory_button(memory_button::MemoryButton *button);
+            void add_calibration_button(calibration_button::CalibrationButton *button);
             void add_switch(desk_switch::DeskSwitch *switch_);
-            void register_sensor(sensor::Sensor *obj)
-            {
+            void set_target_height(float target);
+            void calibrate();
+            void register_sensor(sensor::Sensor *obj) {
                 this->height_sensors.push_back(obj);
             }
-            void register_binary_sensor(binary_sensor::BinarySensor *obj)
-            {
+            void register_moving_sensor(binary_sensor::BinarySensor *obj) {
                 this->moving_sensors.push_back(obj);
             }
-            void set_min_height(float min_height)
-            {
+            void register_calibration_sensor(binary_sensor::BinarySensor *obj) {
+                this->calibration_sensors.push_back(obj);
+            }
+            void set_min_height(float min_height) {
                 this->min_height = min_height;
             }
-            void set_max_height(float max_height)
-            {
+            void set_max_height(float max_height) {
                 this->max_height = max_height;
+            }
+            float get_current_height() {
+              return this->height;
+            }
+            float get_min_height() {
+              return this->min_height;
+            }
+            float get_max_height() {
+              return this->max_height;
+            }
+            float get_pulse_size() {
+              return this->pulse_size;
             }
 
         private:
             std::vector<sensor::Sensor *> height_sensors;
             std::vector<binary_sensor::BinarySensor *> moving_sensors;
+            std::vector<binary_sensor::BinarySensor *> calibration_sensors;
             std::vector<desk_switch::DeskSwitch *> desk_switches;
+            std::vector<calibration_button::CalibrationButton *> calibration_buttons;
 
             /**
              * @brief The desk min height in CM.
@@ -77,11 +90,6 @@ namespace esphome
             float target_height = 0.0;
 
             /**
-             * @brief The update interval in ms
-             */
-            int update_interval = 96;
-
-            /**
              * @brief 1 pulse corresponds to 0.1111 mm
              */
             float pulse_size = 0.1111; 
@@ -104,6 +112,16 @@ namespace esphome
              * For adjustments so all power supplies run equally.
              */
             uint8_t pwm_mask  = 0xC0;
+
+            /**
+             * @brief Whether manual calibration is needed.
+             */
+            bool calibration_needed = false;
+
+            /**
+             * @brief Indicates if desk is being calibrated. 
+             */
+            bool calibrating = false;
         };
 
     } // namespace genius_desk

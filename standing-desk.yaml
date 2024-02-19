@@ -5,7 +5,10 @@ esphome:
   name: standing-desk
 
 external_components:
-  - source: github://pwntester/ESPHomeGeniusStandingDesk@master
+  #- source: github://pwntester/ESPHomeGeniusStandingDesk@master
+  - source:
+      type: local
+      path: components
 
 esp8266:
   board: d1_mini
@@ -54,8 +57,10 @@ sensor:
 binary_sensor:
   - platform: genius_desk
     desk_id: ${desk_id}
-    id: desk_is_moving
-    name: "Desk is Moving"
+    calibration_needed:
+      name: "Calibration Needed"
+    desk_is_moving:
+      name: "Desk is Moving"
 
 switch:
   - platform: genius_desk
@@ -76,3 +81,5 @@ button:
       name: "M3"
     M4:
       name: "M4"
+    calibration:
+      name: "Calibrate"
